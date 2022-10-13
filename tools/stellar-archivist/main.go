@@ -369,5 +369,3 @@ func srcDst(args []string) (string, string) {
 	return src, dst
 }
 
-// just another comment
-// and another
