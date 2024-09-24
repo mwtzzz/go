@@ -29,11 +29,23 @@ ifndef VERSION
 	$(error VERSION environment variable must be set. For example VERSION=2.4.1-101 )
 endif
 ifndef STELLAR_CORE_VERSION
+	$(error STELLAR_CORE_VERSION environment variable must be set. )
+else
 	$(SUDO) docker build --file ./Dockerfile.core-testing --pull $(DOCKER_OPTS) \
 	--label org.opencontainers.image.created="$(BUILD_DATE)" \
-	--build-arg VERSION=$(VERSION) -t $(TAG) .
+	--build-arg VERSION=$(VERSION) --build-arg STELLAR_CORE_VERSION=$(STELLAR_CORE_VERSION) \
+	-t $(TAG) .
+endif
+
+# build Core and Horizon from apt "stable"
+docker-build-core-stable:
+ifndef VERSION
+	$(error VERSION environment variable must be set. For example VERSION=2.4.1-101 )
+endif
+ifndef STELLAR_CORE_VERSION
+	$(error STELLAR_CORE_VERSION environment variable must be set. )
 else
-	$(SUDO) docker build --pull $(DOCKER_OPTS) \
+	$(SUDO) docker build --file ./Dockerfile.stable --pull $(DOCKER_OPTS) \
 	--label org.opencontainers.image.created="$(BUILD_DATE)" \
 	--build-arg VERSION=$(VERSION) --build-arg STELLAR_CORE_VERSION=$(STELLAR_CORE_VERSION) \
 	-t $(TAG) .
